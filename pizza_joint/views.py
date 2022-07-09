@@ -10,7 +10,7 @@ def pizza_list(request):
     # get query set of all pizza objects, serialize it and convert to JSON
     if request.method == 'GET':
         pizzas = Pizza.objects.all()
-        serializer = PizzaSeralizer(pizzas)
+        serializer = PizzaSeralizer(pizzas, many=True)
         return Response(serializer.data)
 
     # get POST data, deserialize it and save object to the database
