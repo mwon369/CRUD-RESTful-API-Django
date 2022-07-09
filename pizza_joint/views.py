@@ -6,4 +6,4 @@ from .serializers import PizzaSeralizer
 def pizza_list(request):
     pizzas = Pizza.objects.all() # get list as query set
     serealizer = PizzaSeralizer(pizzas, many=True) # serialize
-    return JsonResponse(serealizer.data) # convert serialized data to JSON
+    return JsonResponse(serealizer.data, safe=False) # convert serialized data to JSON

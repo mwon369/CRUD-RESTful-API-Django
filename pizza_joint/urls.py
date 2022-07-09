@@ -19,5 +19,5 @@ from pizza_joint import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('pizza_joint/', views.pizza_list, safe=False)
+    path('pizza_joint/', views.pizza_list)
 ]
