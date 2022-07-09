@@ -6,12 +6,12 @@ from rest_framework.response import Response
 from rest_framework import status
 
 @api_view(['GET', 'POST'])
-def pizza_list(request):
+def pizza_list(request, format=None):
     # get query set of all pizza objects, serialize it and convert to JSON
     if request.method == 'GET':
         pizzas = Pizza.objects.all()
         serializer = PizzaSeralizer(pizzas, many=True)
-        return Response(serializer.data)
+        return Response({"pizza":serializer.data})
 
     # get POST data, deserialize it and save object to the database
     elif request.method == 'POST':
@@ -22,7 +22,7 @@ def pizza_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def pizza_detail(request, id):
+def pizza_detail(request, id, format=None):
     # get pizza object with id requested
     try:
         pizza = Pizza.objects.get(pk=id)
