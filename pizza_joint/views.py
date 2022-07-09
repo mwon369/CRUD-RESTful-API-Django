@@ -10,15 +10,16 @@ def pizza_list(request):
     # get query set of all pizza objects, serialize it and convert to JSON
     if request.method == 'GET':
         pizzas = Pizza.objects.all()
-        serializer = PizzaSeralizer(pizzas, many=True)
-        return JsonResponse({"pizza": serializer.data})
+        serializer = PizzaSeralizer(pizzas)
+        return Response(serializer.data)
 
-    # get POST data, deserealize it and save object to the database
+    # get POST data, deserialize it and save object to the database
     elif request.method == 'POST':
         serializer = PizzaSeralizer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def pizza_detail(request, id):
@@ -32,8 +33,16 @@ def pizza_detail(request, id):
     if request.method == 'GET':
         serializer = PizzaSeralizer(pizza)
         return Response(serializer.data)
-        
-    # elif request.method == 'PUT':
+
+    # similar to POST method; deserialize updated data related to a specific pre-existing pizza object
+    elif request.method == 'PUT':
+        serializer = PizzaSeralizer(pizza, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    # elif request.method =='DELETE':
+    elif request.method =='DELETE':
+        pizza.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
